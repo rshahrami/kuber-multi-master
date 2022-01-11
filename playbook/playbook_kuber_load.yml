@@ -1,0 +1,11 @@
+---
+- hosts: load_kuber
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+  - update_all
+  - java
+  - hostname
+  - kuber_load
+

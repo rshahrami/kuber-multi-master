@@ -1,0 +1,32 @@
+---
+# tasks file for kuber_cfssl
+
+# - name: get cfssl binary file
+#   local_action:
+#     module: uri
+#     url: "{{ item.urlss }}"
+#     dest: /usr/local/bin/{{ item.dir }}
+#     mode: +x
+#   with_items:
+#     - { dir: "cfssl", urlss: "https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssl_1.5.0_linux_amd64" }
+#     - { dir: "cfssljson", urlss: "https://github.com/cloudflare/cfssl/releases/download/v1.5.0/cfssljson_1.5.0_linux_amd64" }
+ 
+
+# - name: add kubernetes.repo
+#   local_action:
+#     module: yum_repository
+#     name: kubernetes
+#     baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+#     enabled: yes
+#     gpgcheck: yes
+#     repo_gpgcheck: yes
+#     gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+#     exclude:
+#       - kubectl
+#     description: kubernetes
+
+
+# - name: create cert with cfssl
+#   local_action: shell cmd=/etc/ansible/roles/kuber_cfssl/files/ca-command.sh
+
+

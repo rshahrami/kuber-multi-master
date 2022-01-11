@@ -1,0 +1,10 @@
+---
+- hosts: master_kuber
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+  - kuber_firewall_master
+  # - kuber_init
+  # - kuber_take_token
+  # - kuber_network_calico

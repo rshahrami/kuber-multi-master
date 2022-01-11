@@ -1,0 +1,21 @@
+---
+# tasks file for hostname
+
+- name: set hostname and ip to /etc/hosts
+  shell: |
+    cat <<EOF | sudo tee /etc/hosts
+    192.168.143.26  kuber-master1
+    192.168.143.24  kuber-master2
+    192.168.143.25  kuber-master3
+    192.168.143.44  kuber-lb
+    192.168.143.21  kuber-load1
+    192.168.143.22  kuber-load2
+    192.168.143.41  kuber-slave1
+    192.168.143.42  kuber-slave2
+    192.168.143.43  kuber-slave3
+    EOF
+
+- name: update hostname
+  hostname:
+    name: "{{ new_hostname }}"
+

@@ -1,0 +1,18 @@
+---
+# tasks file for kuber_firewall_master
+
+- name: Add port to firewalld
+  firewalld:
+    port: "{{ item.port }}/{{ item.porto }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  with_items:
+    - { port: "6443", porto: "tcp" }
+    - { port: "10250-10252", porto: "tcp" }
+    - { port: "5473", porto: "tcp" }
+    - { port: "179", porto: "tcp" }
+    - { port: "4789", porto: "udp" }
+    - { port: "8285", porto: "udp" }
+    - { port: "8472", porto: "udp" }
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

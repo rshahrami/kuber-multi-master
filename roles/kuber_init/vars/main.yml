@@ -1,0 +1,5 @@
+---
+# vars file for kuber_init
+
+
+role_directory: /ansible/kuber-cluster-multi-master/roles/kuber_init/files/

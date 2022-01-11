@@ -1,0 +1,64 @@
+---
+# tasks file for docker
+
+- name: copy docker rpm file to server
+  copy:
+    src: "{{ item.name }}"
+    dest: /root/
+  loop:
+    - { name: files/docker-ce-19.03.9-3.el7.x86_64.rpm, owner: administrator, group: administrator}
+    - { name: files/docker-ce-cli-19.03.9-3.el7.x86_64.rpm, owner: administrator, group: administrator}
+    - { name: files/containerd.io-1.2.6-3.3.el7.x86_64.rpm, owner: administrator, group: administrator}
+
+- name: install docker rpm pakages
+  yum:
+    name: "{{ item.name }}"
+    state: present
+  with_items:
+    - { name: /root/docker-ce-cli-19.03.9-3.el7.x86_64.rpm }
+    - { name: /root/containerd.io-1.2.6-3.3.el7.x86_64.rpm }
+    - { name: /root/docker-ce-19.03.9-3.el7.x86_64.rpm }
+
+
+- name: enable service docker
+  systemd:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - docker
+    - containerd
+
+- name: start service docker
+  systemd:
+    state: started
+    name: "{{ item }}"
+  with_items:
+    - docker
+    - containerd
+
+
+- name: add group docker
+  group:
+    name: docker
+    state: present
+
+- name: usermod docker
+  user:
+    name: administrator
+    groups: [docker]
+    append: yes
+
+
+- name: remove docker files
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /root/docker-ce-19.03.9-3.el7.x86_64.rpm
+    - /root/docker-ce-cli-19.03.9-3.el7.x86_64.rpm
+    - /root/containerd.io-1.2.6-3.3.el7.x86_64.rpm
+
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 180

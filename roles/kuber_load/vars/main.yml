@@ -1,0 +1,8 @@
+---
+# vars file for kuber_load
+
+config_master: "/etc/ansible/roles/kuber_load/files"
+config_master_to: "/etc/keepalived/"
+
+config_backup: "/etc/ansible/roles/kuber_load/files"
+config_backup_to: "/etc/keepalived/"

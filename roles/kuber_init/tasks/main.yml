@@ -1,0 +1,45 @@
+---
+# tasks file for kuber_init
+
+# - name: copy init kuber config file to all master
+#   copy:
+#     src: "{{ role_directory }}config-1.yaml"
+#     dest: config.yaml
+
+
+# - name: create init kubeadm from config file in master-1
+#   command: kubeadm init --config config.yaml
+#   when: inventory_hostname == kuber-master1
+
+
+# - name: copy cert file to other master
+#   command: scp -rp /etc/kubernetes/pki {{ item }}:/etc/kubernetes/
+#   with_items:
+#     - kuber-master2
+#     - kuber-master3
+
+
+# - name: remove apiserver.cert and apiserver.key in master-2 and 3
+#   file:
+#     path: /etc/kubernetes/pki/
+#     state: absent
+#   when_items:
+#     - apiserver.cert
+#     - apiserver.key
+#   when: inventory_hostname != 'kuber-master1'
+
+
+# - name: create init kubeadm from config file in master-2 and 3
+#   command: kubeadm init --config config.yaml
+#   when: inventory_hostname != 'kuber-master1'
+
+
+# - name: setup kubeconfig non-root user
+#   shell: "{{ item }}"
+#   with_items:
+#     - mkdir -p $HOME/.kube
+#     - sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#     - sudo chown $(id -u):$(id -g) $HOME/.kube/config
+  
+# - name: setup kubeconfig root user
+#   shell: export KUBECONFIG=/etc/kubernetes/admin.conf

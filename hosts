@@ -1,0 +1,27 @@
+[nodes_kuber]
+kuber-master1 ansible_user=root new_hostname=kuber-master1
+kuber-master2 ansible_user=root new_hostname=kuber-master2
+kuber-master3 ansible_user=root new_hostname=kuber-master3
+kuber-slave1 ansible_user=root new_hostname=kuber-slave1
+kuber-slave2 ansible_user=root new_hostname=kuber-slave2
+kuber-slave3 ansible_user=root new_hostname=kuber-slave3
+
+
+[master_kuber]
+kuber-master1 ansible_user=root
+kuber-master2 ansible_user=root
+kuber-master3 ansible_user=root
+
+[slave_kuber]
+kuber-slave1 ansible_user=root
+kuber-slave2 ansible_user=root
+kuber-slave3 ansible_user=root
+
+[load_kuber]
+kuber-load1 ansible_user=root new_hostname=kuber-load1
+kuber-load2 ansible_user=root new_hostname=kuber-load2
+
+[etcd_kuber]
+kuber-master1 ansible_user=root
+kuber-master2 ansible_user=root
+kuber-master3 ansible_user=root

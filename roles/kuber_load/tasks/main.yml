@@ -1,0 +1,92 @@
+---
+# tasks file for kuber_load
+
+- name: Add port to firewalld
+  firewalld:
+    port: "{{ item.port }}/{{ item.porto }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  with_items:
+    - { port: "6443", porto: "tcp" }
+    - { port: "8080", porto: "tcp" }
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+- name: add rich rule for keepalived
+  firewalld:
+    rich_rule: 'rule protocol value="vrrp" accept'
+    permanent: yes
+    state: enabled
+    immediate: yes
+
+
+- name: install haproxy, keepalived, policycoreutils-python and psmisc
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - haproxy
+    - keepalived
+    - psmisc
+    - policycoreutils-python
+
+
+- name: config SElinux
+  command: semanage port -a -t http_cache_port_t 6443 -p tcp
+
+
+- name: copy haproxy config file to load vm
+  copy:
+    src: /etc/ansible/roles/kuber_load/files/haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+    
+
+- name: enable haproxy service
+  systemd:
+    name: haproxy
+    state: started
+    enabled: yes
+
+
+- name: create and config file for non-local bind
+  shell: |
+    cat <<EOF | sudo tee /etc/sysctl.d/ip_nonlocal_bind.conf
+    net.ipv4.ip_nonlocal_bind=1
+    EOF
+
+
+- name: load settings all system configuration file
+  command: sysctl --system
+
+
+- name: get ip add from machine
+  debug:
+    var: ansible_eth0.ipv4.address
+
+
+- name: remove default keepalived config
+  file:
+    path: "{{ config_master_to }}keepalived.conf"
+    state: absent
+
+
+- name: config keepalived master
+  copy:
+    src: "{{ config_master }}/keepalived-master.conf"
+    dest: "{{ config_master_to }}/keepalived.conf"
+  when: inventory_hostname == 'kuber-load1'
+
+
+- name: config keepalived backup
+  copy:
+    src: "{{ config_backup }}/keepalived-backup.conf"
+    dest: "{{ config_backup_to }}/keepalived.conf"
+  when: inventory_hostname == 'kuber-load2'
+
+
+- name: enable keepalived service
+  systemd:
+    name: keepalived
+    state: started
+    enabled: yes

@@ -1,0 +1,22 @@
+---
+# tasks file for kuber_add_worker
+
+
+- name: copy the join command to worker nodes
+  copy:
+    src: /ansible/kuber-cluster-multi-master/roles/kuber_add_master/files/join-command
+    dest: /root/join-command.sh
+    mode: 0777
+
+- name: join node to cluster
+  command: sh /root/join-command-worker.sh
+
+
+- name: remove join-command in local machin or master nor
+  local_action: file path=/ansible/kuber-cluster-multi-master/roles/kuber_add_master/files/join-command state=absent
+  when: inventory_hostname == 'kuber-master1'
+
+- name: remove join-command.sh in worker node
+  file:
+    path: /root/join-command-worker.sh
+    state: absent

@@ -1,0 +1,15 @@
+---
+# tasks file for kuber_take_token
+
+- name: generate join command
+  command: kubeadm token create --print-join-command
+  register: join_command
+  when: inventory_hostname == 'kuber-master1'
+
+
+- name: copy join command to local file un kuber_add_master files directory
+  local_action: copy content="{{ join_command.stdout_lines[0] }}" dest=/ansible/kuber-cluster-multi-master/roles/kuber_add_master/files/join-command
+  when: inventory_hostname == 'kuber-master1'
+
+
+

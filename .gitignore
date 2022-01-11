@@ -1,0 +1,10 @@
+roles/java/files/jdk-8u221-linux-x64.tar.gz
+
+roles/kuber_etcd/files/etcd-v3.5.1-linux-amd64*
+roles/docker/files/*
+
+roles/kuber_cfssl/files/ca.*
+roles/kuber_cfssl/files/ca-key.pem
+roles/kuber_cfssl/files/kubernetes.*
+roles/kuber_cfssl/files/kubernetes-key.pem
+roles/java/files/jdk-8u221-linux-x64.tar.gz

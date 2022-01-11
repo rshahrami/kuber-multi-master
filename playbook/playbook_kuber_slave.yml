@@ -1,0 +1,8 @@
+---
+- hosts: slave_kuber
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+  - kuber_firewall_salve
+  # - kuber_add_worker

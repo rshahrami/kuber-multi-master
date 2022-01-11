@@ -1,0 +1,13 @@
+---
+- hosts: nodes_kuber
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+  - update_all
+  # - java
+  # - docker
+  - hostname
+  - kuber_requirements_all
+  - kuber_kubeadm_let_ctl
+

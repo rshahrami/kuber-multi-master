@@ -1,0 +1,6 @@
+
+---
+
+- import_playbook: playbook_kuber.yml
+
+- import_playbook: playbook_kuber_load.yml

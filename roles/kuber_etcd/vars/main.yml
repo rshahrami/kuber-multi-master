@@ -1,0 +1,19 @@
+---
+# vars file for kuber_etcd
+
+create_directory:
+  - /etc/etcd
+  - /var/lib/etcd
+
+role_directory: /etc/ansible/roles/kuber_etcd/files/
+
+ETCD_VER: v3.5.1
+DOWNLOAD_URL: https://storage.googleapis.com/etcd
+Archive: etcd-{{ ETCD_VER }}-linux-amd64.tar.gz
+extract: etcd-{{ ETCD_VER }}-linux-amd64
+url_etcd: "{{ DOWNLOAD_URL }}/{{ ETCD_VER }}/{{ Archive }}"
+
+cert_directory: /etc/ansible/roles/kuber_cfssl/files
+
+etcd_services: /etc/ansible/roles/kuber_etcd/files
+etcd_services_to: /etc/systemd/system

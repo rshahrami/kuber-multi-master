@@ -1,0 +1,17 @@
+---
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: latest
+  retries: 2
+  delay: 5
+
+- name: Reboot
+  reboot:
+    reboot_timeout: 180
+  

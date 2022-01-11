@@ -1,0 +1,80 @@
+---
+# tasks file for kuber_etcd
+
+- name: Add port to firewalld
+  firewalld:
+    port: "2379-2380/tcp"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+
+- name: create directory /etc/etcd/ and /var/lib/etcd
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ create_directory }}"
+
+  
+
+- name: copy cert data to remote hosts
+  copy:
+    src: "{{ cert_directory }}/{{ item }}"
+    dest: /etc/etcd/
+  with_items:
+    - kubernetes.pem
+    - kubernetes-key.pem
+    - ca.pem
+
+- name: download etcd binary
+  local_action:
+    module: get_url
+    url: "{{ url_etcd }}"
+    dest: "{{ role_directory }}"
+
+
+
+- name: unarchive etcd tar
+  unarchive:
+    src: files/{{ Archive }}
+    dest: "{{ role_directory }}"
+  delegate_to: localhost
+
+- name: move data extracted to /use/local/bin/ directory
+  copy:
+    src: "{{ role_directory }}""{{ extract }}"/{{ item }}
+    dest: /usr/local/bin/
+    mode: +x
+  with_items:
+    - etcd
+    - etcdctl
+    - etcdutl
+
+
+- name: copy etcd.service to remote etcd
+  copy:
+    src: "{{ etcd_services }}/{{ item.scr_ser }}"
+    dest: "{{ etcd_services_to }}/{{ item.dest_ser }}"
+  with_items:
+    - { scr_ser: "etcd-1.service", dest_ser: "etcd.service", host: "kuber-master1" }
+    - { scr_ser: "etcd-2.service", dest_ser: "etcd.service", host: "kuber-master2" }
+    - { scr_ser: "etcd-3.service", dest_ser: "etcd.service", host: "kuber-master3" }
+  when: "inventory_hostname == item.host"
+
+
+- name: daemon-reload
+  systemd:
+    daemon_reload: yes
+
+
+- name: start and enable etcd.service
+  systemd:
+    name: etcd
+    state: started
+    enabled: yes
+
+
+

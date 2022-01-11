@@ -1,0 +1,6 @@
+
+---
+
+- include: playbook_kuber.yml
+
+- include: playbook_kuber_load.yml

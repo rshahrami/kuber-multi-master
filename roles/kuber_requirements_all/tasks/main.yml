@@ -1,0 +1,68 @@
+---
+# tasks file for kuber_all_node
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: "{{ item }}"
+    fstype: swap
+    state: absent
+  with_items:
+    - swap
+    - none
+
+- name: disable swap
+  command: swapoff -a
+  when: ansible_swaptotal_mb > 0
+
+- name: check active br_netfilter
+  command: lsmod | grep br_netfilter
+  register: result
+  ignore_errors: yes
+
+- name: add br_netfilter module
+  modprobe:
+    name: "{{ item }}"
+  with_items:
+  - br_netfilter
+  - overlay
+  when:
+    - result.stdout != ""
+  
+- name: add br_netfilter to k8s.conf
+  shell: |
+    cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+    br_netfilter
+    EOF
+  
+- name: add net.bridge.bridge-nf-call to k8s.conf
+  shell: |
+    cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
+    net.bridge.bridge-nf-call-ip6tables = 1
+    net.bridge.bridge-nf-call-iptables = 1
+    EOF
+
+- name: load setting all system configurations files
+  command: sysctl --system
+
+- name: create container runtime docker
+  file:
+    path: /etc/docker
+    state: directory
+
+- name: add daemon.js for docker runtime
+  shell: |
+    cat <<EOF | sudo tee /etc/docker/daemon.json
+    {
+      "exec-opts": ["native.cgroupdriver=systemd"],
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "100m"
+      },
+      "storage-driver": "overlay2"
+    }
+    EOF
+
+- name: restart docker
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker

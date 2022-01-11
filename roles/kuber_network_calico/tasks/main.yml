@@ -1,0 +1,22 @@
+---
+# tasks file for kuber_network_calico
+
+- name: curl calico yml for config
+  get_url:
+    url: https://docs.projectcalico.org/manifests/calico.yaml
+    dest: /root/calico.yaml
+
+
+
+- name: cahnge setting of calico.yaml
+  replace:
+    path: /root/calico.yaml
+    regexp: "{{ item.name_regex }}"
+    replace: "{{ item.name_line }}"
+  with_items:
+    - { name_regex: '# - name: CALICO_IPV4POOL_CIDR', name_line: '- name: CALICO_IPV4POOL_CIDR' }
+    - { name_regex: '#   value: "192.168.0.0/16"', name_line: '  value: "172.16.0.0/20"' }
+
+
+- name: install calico pod network
+  command: kubectl apply -f /root/calico.yaml
