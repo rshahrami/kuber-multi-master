@@ -1,0 +1,9 @@
+---
+- hosts: master_kuber
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+  - kuber_add_master
+
+
