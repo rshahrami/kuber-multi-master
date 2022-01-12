@@ -5,7 +5,7 @@
   get_url:
     url: https://docs.projectcalico.org/manifests/calico.yaml
     dest: /root/calico.yaml
-
+  when: inventory_hostname == 'kuber-master1'
 
 
 - name: cahnge setting of calico.yaml
@@ -16,7 +16,9 @@
   with_items:
     - { name_regex: '# - name: CALICO_IPV4POOL_CIDR', name_line: '- name: CALICO_IPV4POOL_CIDR' }
     - { name_regex: '#   value: "192.168.0.0/16"', name_line: '  value: "172.16.0.0/20"' }
-
+  when: inventory_hostname == 'kuber-master1'
 
 - name: install calico pod network
   command: kubectl apply -f /root/calico.yaml
+  when: inventory_hostname == 'kuber-master1'
+  

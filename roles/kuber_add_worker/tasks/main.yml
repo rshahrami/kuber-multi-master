@@ -9,7 +9,7 @@
     mode: 0777
 
 - name: join node to cluster
-  command: sh /root/join-command-worker.sh
+  command: sh /root/join-command.sh
 
 
 - name: remove join-command in local machin or master nor
@@ -18,5 +18,5 @@
 
 - name: remove join-command.sh in worker node
   file:
-    path: /root/join-command-worker.sh
+    path: /root/join-command.sh
     state: absent
