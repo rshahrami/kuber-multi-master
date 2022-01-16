@@ -25,3 +25,4 @@ kuber-load2 ansible_user=root new_hostname=kuber-load2
 kuber-master1 ansible_user=root
 kuber-master2 ansible_user=root
 kuber-master3 ansible_user=root
+
