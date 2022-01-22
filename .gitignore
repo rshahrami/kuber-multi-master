@@ -8,3 +8,5 @@ roles/kuber_cfssl/files/ca-key.pem
 roles/kuber_cfssl/files/kubernetes.*
 roles/kuber_cfssl/files/kubernetes-key.pem
 roles/java/files/jdk-8u221-linux-x64.tar.gz
+
+kuber-multi-master_ENV
