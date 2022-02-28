@@ -1,16 +1,16 @@
 ---
 # tasks file for java
 
-# - name: Create a directory - java directory
-#   file:
-#     path: /usr/java
-#     state: directory
+- name: Create a directory - java directory
+  file:
+    path: /usr/java
+    state: directory
 
-# - name: Unarchive a java file that is already on the remote machine
-#   unarchive:
-#     src: files/jdk-8u221-linux-x64.tar.gz
-#     dest: /usr/java/
-#     remote_src: no
+- name: Unarchive a java file that is already on the remote machine
+  unarchive:
+    src: files/jdk-8u221-linux-x64.tar.gz
+    dest: /usr/java/
+    remote_src: no
   
 
 - name: add br_netfilter to k8s.conf

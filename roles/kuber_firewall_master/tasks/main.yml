@@ -15,7 +15,5 @@
     - { port: "10257", porto: "tcp" }
     - { port: "5473", porto: "tcp" }
     - { port: "179", porto: "tcp" }
-    # - { port: "4789", porto: "udp" }
-    # - { port: "8285", porto: "udp" }
-    # - { port: "8472", porto: "udp" }
+    - { port: "4789", porto: "udp" }
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

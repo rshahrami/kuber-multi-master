@@ -29,12 +29,12 @@
     - kubernetes-key.pem
     - ca.pem
 
+
 - name: download etcd binary
   local_action:
     module: get_url
     url: "{{ url_etcd }}"
     dest: "{{ role_directory }}"
-
 
 
 - name: unarchive etcd tar
